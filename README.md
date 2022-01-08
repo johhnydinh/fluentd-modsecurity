@@ -39,7 +39,7 @@ Example fluent.conf setup.
   path /path/to/modsec_audit.log
   <parse>
     @type multiline
-    format_firstline /^-{2,3}][a-zA-Z0-9]{8}-{2,3}A--$/
+    format_firstline /^-{2,3}[a-zA-Z0-9]{8}-{2,3}A--$/
     format1 /(?<message>.*)/
   </parse>
 </source>
