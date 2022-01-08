@@ -138,10 +138,10 @@ module Fluent::Plugin
         end
 
         # split all request headers into a sub-map
-        hash['requestHeaders'] = Hash.new
+        hash['requestHeaders'] = hash['raw_requestHeaders']
         hash['raw_requestHeaders'].split(/\n/).each do |header|
           parts = header.split(/:/)
-          hash['requestHeaders'][parts[0].strip] = parts[1].strip
+          hash['requestHeaders'][parts[1].strip] = parts[1].strip
         end
 
         hash.delete('raw_requestHeaders')
@@ -169,10 +169,10 @@ module Fluent::Plugin
         matchData = section.match(/.+\n(?m)(?<raw_responseHeaders>.+)/)
         hash = hash.merge(Hash[matchData.names.zip(matchData.captures)])
 
-        hash['responseHeaders'] = Hash.new
+        hash['responseHeaders'] = hash['raw_responseHeaders']
         hash['raw_responseHeaders'].split(/\n/).each do |header|
           parts = header.split(/:/)
-          hash['responseHeaders'][parts[0].strip] = parts[1].strip
+          hash['responseHeaders'][parts[1].strip] = parts[1].strip
         end
 
         hash.delete('raw_responseHeaders')
