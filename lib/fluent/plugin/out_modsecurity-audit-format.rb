@@ -211,36 +211,15 @@ module Fluent::Plugin
         trailer_array.each do |entry|
           if entry.match(/^Message|ModSecurity: /)
             msg = Hash.new
-            extractVal(/(?:Message|ModSecurity): (.+)\s\[file/, entry, msg, 'info')
-            extractVal(/\[file "(.*?)"\]/, entry, msg, 'file')
-            extractVal(/\[line "(.*?)"\]/, entry, msg, 'line')
-            extractVal(/\[id "(.*?)"\]/, entry, msg, 'id')
-            extractVal(/\[rev "(.*?)"\]/, entry, msg, 'rev')
-            extractVal(/\[msg "(.*?)"\]/, entry, msg, 'msg')
-            extractVal(/\[data "(.*?)"\]/, entry, msg, 'data')
-            extractVal(/\[severity "(.*?)"\]/, entry, msg, 'severity')
-            extractVal(/\[ver "(.*?)"\]/, entry, msg, 'ver')
-            extractVal(/\[maturity "(.*?)"\]/, entry, msg, 'maturity')
-            extractVal(/\[accuracy "(.*?)"\]/, entry, msg, 'accuracy')
-            extractVal(/\[tag "(.*?)"\]/, entry, msg, 'tag')
-            extractVal(/\[hostname "(.*?)"\]/, entry, msg, 'hostname')
-            extractVal(/\[uri "(.*?)"\]/, entry, msg, 'uri')
+            extractVal(/\[id "(.*?)"\]/, entry, msg, ' ')    
+            extractVal(/\[msg "(.*?)"\]/, entry, msg, '')
             auditLogTrailerMessages.push(msg)
           end
         end
-
-        #key/value pair of audit log trailer
-        hash['auditLogTrailer'] = Hash.new
-
-        # ModSecurity v3 does not log Message information
-        section.split(/\n/).each do |line|
-          parts = line.split(/:\s/)
-          hash['auditLogTrailer'][parts[0].strip] = parts[1].strip
-        end
-
-        hash['auditLogTrailer'].delete('Message')
-        hash['auditLogTrailer'].delete('ModSecurity')
-        hash['auditLogTrailer']['messages'] = auditLogTrailerMessages
+        
+        hash['ruleTriggered'] = Hash.new
+        hash['ruleTriggered'] = auditLogTrailerMessages.map{ |i| "" + i.to_s + ""}.join("\n")
+        hash['ruleTriggered'].delete! '{}\=>\"'
       end
 
       # ModSecurity v3 does not log Stopwatch information
