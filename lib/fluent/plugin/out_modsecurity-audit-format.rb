@@ -217,9 +217,9 @@ module Fluent::Plugin
           end
         end
         
-        hash['ruleTriggered'] = Hash.new
-        hash['ruleTriggered'] = auditLogTrailerMessages.map{ |i| "" + i.to_s + ""}.join("\n")
-        hash['ruleTriggered'].delete! '{}\=>\"'
+        hash['ruleID'] = Hash.new
+        hash['ruleID'] = auditLogTrailerMessages.map{ |i| "" + i.to_s + ""}.join("\n")
+        hash['ruleID'].delete! '{}\=>\"'
       end
 
       # ModSecurity v3 does not log Stopwatch information
